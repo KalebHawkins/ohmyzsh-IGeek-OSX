@@ -2,7 +2,8 @@
 
 # System load
 #g_load=`top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{printf "☉ System load : %.1f%", 100-$1 }'`
-g_load=`ps -A -o %cpu| awk '{ cpu += $1 } END { printf("☉ System load: %.1f", cpu) }'`
+g_cpuusage=`top -l 1 | grep "CPU usage"  | awk '{ print "☉ CPU Usage: " $3 + $5"%"}'`
+g_loadavg=`top -l 1 | grep "Load Avg:"  | awk '{ print "☉ Load Averages: " $3" " $4" " $5}'`
 
 # Memory Usage
 #g_memory=`free -m | awk 'NR==2{printf "☉ Memory Usage: %.2f%", $3*100/$2 }'`
@@ -15,7 +16,7 @@ g_disk=`df -h | awk '$NF=="/"{printf("☉ Disk Usage: %.1f", $5)}'`
 g_uptime=`uptime | awk -F'( |,|:)+' '{ if ($7=="min") m=$6; else { if ($7~/^day/) { d=$6; h=$8; m=$9} else {h=$6;m=$7}}}{print "☉ System uptime:",d+0,"days,",h+0,"hours"}'`
 
 # array System information
-g_listOfNames=("$g_load" "$g_memory" "$g_disk" "$g_uptime")
+g_listOfNames=("$g_cpuusage" "$g_loadavg" "$g_memory" "$g_disk" "$g_uptime")
 
 # System information
 g_information=`
